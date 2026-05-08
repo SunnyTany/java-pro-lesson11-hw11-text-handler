@@ -1,7 +1,5 @@
 package app;
 
-import java.nio.file.Paths;
-
 public class Main {
 
     private static final String BASE_PATH = "files/";
@@ -11,13 +9,16 @@ public class Main {
         String newFileName = "myfile";
         String content = "Super information.";
         String path = BASE_PATH + newFileName + ".txt";
-        // manipulation methods
-        getOutput(handler.createFile(path));
-        getOutput(handler.writeToFile(Paths.get(path), content));
-        getOutput("CONTENT: " + handler.readFromFile(path));
-    }
 
-    private static void getOutput(String output) {
-        System.out.println(output);
+        try {
+            handler.createFile(path);
+            handler.writeToFile(path, content);
+
+            String fileContent = handler.readFromFile(path);
+            System.out.println("CONTENT: " + fileContent);
+
+        } catch (FileProcessingException e) {
+            System.out.println("Application error: " + e.getMessage());
+        }
     }
 }
