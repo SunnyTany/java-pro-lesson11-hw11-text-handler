@@ -1,43 +1,40 @@
 package app;
 
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class FileHandler {
 
-    // Takes a path string, creates a file, and returns the result
-    public String createFile(String path) {
-        Path newFile;
+    // Takes a path string, creates a file
+    public void createFile(String pathStr) {
         try {
-            // Use Paths.get() or Path.of() to create a Path object
-            newFile = Files.createFile(Paths.get(path));
-        } catch (FileAlreadyExistsException e) {
-            return "File already exists!";
+            Files.createFile(Path.of(pathStr));
+            System.out.println("Created " + pathStr);
         } catch (IOException e) {
-            return "Something wrong: " + e.getMessage();
+            System.out.println("Error creating a file by path: " + pathStr);
+            throw new FileProcessingException(e);
         }
-        return "Created " + newFile;
     }
 
     // Writes content to the file at the specified Path
-    public String writeToFile(Path path, String content) {
+    public void writeToFile(String pathStr, String content) {
         try {
-            Files.writeString(path, content);
+            Files.writeString(Path.of(pathStr), content);
+            System.out.println("Recorded in " + pathStr);
         } catch (IOException e) {
-            return e.getMessage();
+            System.out.println("Error writing to file: " + pathStr);
+            throw new FileProcessingException(e);
         }
-        return "Recorded in " + path;
     }
 
     // Reads content from a file and returns it as a string
-    public String readFromFile(String path) {
+    public String readFromFile(String pathStr) {
         try {
-            return Files.readString(Paths.get(path));
+            return Files.readString(Path.of(pathStr));
         } catch (IOException e) {
-            return "Something wrong: " + e.getMessage();
+            System.out.println("Error reading file: " + pathStr);
+            throw new FileProcessingException(e);
         }
     }
 }
